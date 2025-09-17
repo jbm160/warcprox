@@ -26,6 +26,7 @@ import warcprox
 import os
 import socket
 import random
+import asyncio
 
 class WarcWriter:
     '''
@@ -176,6 +177,7 @@ class WarcWriter:
                 finalpath = os.path.sep.join(
                         [self.directory, self.finalname])
                 os.rename(self.path, finalpath)
+                asyncio.run(self.index_warcs(self.directory))
             except Exception as exc:
                 self.logger.error(
                     'could not close and rename file %s (%s)', self.path, exc)
@@ -197,6 +199,21 @@ class WarcWriter:
                     'rolling over %s because it has reached %s bytes in size',
                     self.finalname, total_warc_file_size)
             self.close()
+    
+    async def index_warcs(dir):
+        cmd = "/app/indexing/warc-indexer.sh " + dir
+        proc = await asyncio.create_subprocess_shell(
+            cmd,
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.PIPE)
+        
+        stdout, stderr = await proc.communicate()
+        
+        self.logger.info(f'[Indexer exited with {proc.returncode}]')
+        if stdout:
+            self.logger.info(f'[Indexer results]: {stdout.decode()}')
+        if stderr:
+            self.logger.error(f'[Indexer error]: {stderr.decode()}')
 
 class WarcWriterPool:
     '''

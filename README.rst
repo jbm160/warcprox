@@ -15,6 +15,11 @@ for more info).
 Warcprox was originally based on `pymiproxy
 <https://github.com/allfro/pymiproxy>`_ by Nadeem Douba.
 
+This fork has been modified to interface more effectively with Solrwayback as
+an indexing and playback interface. Changes include automatically indexing new
+WARC files as they are closed and modifying the file prefix to sort WARC files
+by year and month.
+
 .. contents::
 
 Getting started

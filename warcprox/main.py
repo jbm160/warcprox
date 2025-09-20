@@ -100,6 +100,9 @@ def _build_arg_parser(prog='warcprox', show_hidden=False):
             '-n', '--prefix', dest='prefix', default='WARCPROX',
             help='default WARC filename prefix')
     arg_parser.add_argument(
+            '--prefix-by-date', dest='prefix-by-date', default=False, action='store_true',
+            help='User year and month as prefix to allow subfolder sorting by date.')
+    arg_parser.add_argument(
             '-s', '--size', dest='rollover_size', default=1000*1000*1000,
             type=int, help='WARC file rollover size threshold in bytes')
     arg_parser.add_argument('--rollover-idle-time',

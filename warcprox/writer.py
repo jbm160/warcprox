@@ -49,6 +49,8 @@ class WarcWriter:
         self.finalname = None
         self.gzip = options.gzip or False
         self.prefix = options.prefix or 'warcprox'
+        if options.prefix_by_date:
+        	self.prefix = strftime("%Y-%m")
         self.port = options.port or 8000
         self.open_suffix = '' if options.no_warc_open_suffix else '.open'
         self.rollover_size = options.rollover_size or 1000000000
@@ -75,7 +77,7 @@ class WarcWriter:
         hostname = socket.getfqdn()
         shorthostname = hostname.split('.')[0]
         fname = self.filename_template.format(
-                prefix=time.strftime("%Y-%m"), timestamp14=warcprox.timestamp14(),
+                prefix=self.prefix, timestamp14=warcprox.timestamp14(),
                 timestamp17=warcprox.timestamp17(),
                 serialno='{:05d}'.format(serial),
                 randomtoken=self.randomtoken, hostname=hostname,
@@ -91,6 +93,9 @@ class WarcWriter:
         Opens a new warc file with filename prefix `self.prefix` and serial
         number `self.serial` and assigns file handle to `self.f`.
         '''
+        if options.prefix_by_date:
+        	self.prefix = strftime("%Y-%m")
+        	self.directory = os.path.sep.join([options.directory, options.prefix])
         if not os.path.exists(self.directory):
             self.logger.info(
                     "warc destination directory %s doesn't exist, creating it",

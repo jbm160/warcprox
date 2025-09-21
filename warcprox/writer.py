@@ -93,7 +93,7 @@ class WarcWriter:
         Opens a new warc file with filename prefix `self.prefix` and serial
         number `self.serial` and assigns file handle to `self.f`.
         '''
-        if options.prefix_by_date:
+        if self.options.prefix_by_date:
         	self.prefix = strftime("%Y-%m")
         	self.directory = os.path.sep.join([options.directory, options.prefix])
         if not os.path.exists(self.directory):

@@ -50,7 +50,7 @@ class WarcWriter:
         self.gzip = options.gzip or False
         self.prefix = options.prefix or 'warcprox'
         if options.prefix_by_date:
-        	self.prefix = strftime("%Y-%m")
+        	self.prefix = time.strftime("%Y-%m")
         self.port = options.port or 8000
         self.open_suffix = '' if options.no_warc_open_suffix else '.open'
         self.rollover_size = options.rollover_size or 1000000000
@@ -94,7 +94,7 @@ class WarcWriter:
         number `self.serial` and assigns file handle to `self.f`.
         '''
         if self.options.prefix_by_date:
-        	self.prefix = strftime("%Y-%m")
+        	self.prefix = time.strftime("%Y-%m")
         	self.directory = os.path.sep.join([self.options.directory, self.prefix])
         if not os.path.exists(self.directory):
             self.logger.info(

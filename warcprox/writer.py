@@ -95,7 +95,7 @@ class WarcWriter:
         '''
         if self.options.prefix_by_date:
         	self.prefix = strftime("%Y-%m")
-        	self.directory = os.path.sep.join([options.directory, options.prefix])
+        	self.directory = os.path.sep.join([self.options.directory, self.prefix])
         if not os.path.exists(self.directory):
             self.logger.info(
                     "warc destination directory %s doesn't exist, creating it",
